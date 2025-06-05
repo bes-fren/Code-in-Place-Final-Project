@@ -169,7 +169,7 @@ def draw_palette(canvas):
         #All these variables are specified so the palette text will always be centered.
         palette_left + ((PALETTE_WIDTH - text_width)/2),
 
-        #I eyeballed this to make the the text centered. Shouldn't break if we change the constants...?      
+        #I eyeballed this to make the the text up-down centered. Shouldn't break if we change the constants...?      
         15,
         text = "palette",
         font = "courier")
@@ -273,13 +273,23 @@ def change_active_color(canvas,selected_color_box,click):
     global colors_dict
     global active_color
 
-    #Checks to see if the latest click falls within the bounds of any color box and, if so, sets the
-    #active color to be the color of the box the user just clicked.
+    """Checks to see if the latest click falls within the bounds of any color box and, if so, sets the
+    active color to be the color of the box the user just clicked.
+    For reference on what these value[x]'s correspond to, they're talking about the bounds of the color
+    boxes.  
+    Index 0 - color box left bound
+    Index 1 - color box top bound
+    Index 2 - color box right bound
+    Index 3 - color box bottom bound"""
+    
     for key, value in colors_dict.items():
         if click[0] > value[0] and click[0] < value[2] and click[1] > value[1] and click[1] < value[3]:
             active_color = key
 
     #This moves the selection box by looking up the coordinates associated with the active color.
+    #The -5 offset is to shift the color selection box up and to the left of the actual color box.
+    #Since the color selection box is layered underneath the actual color boxes, this gives the 
+    #illusion of a yellow outline around the selected color box.
     canvas.moveto(selected_color_box,
     colors_dict.get(active_color)[0]-5,
     colors_dict.get(active_color)[1]-5)
